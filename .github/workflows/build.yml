@@ -23,6 +23,7 @@ jobs:
           ANDROID_SDK_ROOT=${{ runner.temp }}/android-sdk
           echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
           echo "ANDROID_HOME=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
+          echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
           mkdir -p $ANDROID_SDK_ROOT/cmdline-tools
           cd $ANDROID_SDK_ROOT/cmdline-tools
           wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
@@ -35,9 +36,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v3
 
       - name: Build debug APK
-        run: gradle assembleDebug
-        env:
-          ANDROID_HOME: ${{ env.ANDROID_HOME }}
+        run: gradle assembleDebug --no-daemon
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
